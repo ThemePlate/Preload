@@ -16,16 +16,28 @@ class Preload {
 		global $wp_scripts, $wp_styles;
 
 		foreach ( array( $wp_scripts, $wp_styles ) as $dependencies ) {
-			if ( ! empty( $dependencies->queue ) ) {
-				foreach( $dependencies->queue as $handle ) {
-					if ( ! isset( $dependencies->registered[ $handle ] ) ) {
-						continue;
-					}
+			self::process( $dependencies );
+		}
 
-					$dependency = $dependencies->registered[ $handle ];
+	}
 
-					echo "<link rel='preload' href='{$dependency->src}' />\n";
+
+	private static function process( $dependencies ) {
+
+		if ( ! empty( $dependencies->queue ) ) {
+			$type = get_class( $dependencies );
+			$type = str_replace( 'WP_', '', $type );
+			$type = rtrim( $type, 's' );
+			$type = strtolower( $type );
+
+			foreach( $dependencies->queue as $handle ) {
+				if ( ! isset( $dependencies->registered[ $handle ] ) ) {
+					continue;
 				}
+
+				$dependency = $dependencies->registered[ $handle ];
+
+				echo "<link rel='preload' href='{$dependency->src}' as='{$type}' />\n";
 			}
 		}
 
