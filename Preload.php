@@ -26,9 +26,7 @@ class Preload {
 
 		if ( ! empty( $dependencies->queue ) ) {
 			$type = get_class( $dependencies );
-			$type = str_replace( 'WP_', '', $type );
-			$type = rtrim( $type, 's' );
-			$type = strtolower( $type );
+			$type = strtolower( substr( $type, 3, -1 ) );
 
 			foreach( $dependencies->queue as $handle ) {
 				if ( ! isset( $dependencies->registered[ $handle ] ) ) {
