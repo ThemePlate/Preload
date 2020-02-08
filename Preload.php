@@ -13,30 +13,26 @@ class Preload {
 
 	public static function init() {
 
-		global $wp_scripts, $wp_styles;
+		$resources = apply_filters( 'themeplate_preload', array() );
 
-		foreach ( array( $wp_scripts, $wp_styles ) as $dependencies ) {
-			self::process( $dependencies );
+		foreach( $resources as $resource ) {
+			self::process( $resource );
 		}
 
 	}
 
 
-	private static function process( $dependencies ) {
+	private static function process( $resource ) {
 
-		if ( empty( $dependencies->queue ) ) {
-			return;
-		}
+		global $wp_scripts, $wp_styles;
 
-		$type = get_class( $dependencies );
-		$type = strtolower( substr( $type, 3, -1 ) );
-
-		$resources = apply_filters( 'themeplate_preload', array() );
-
-		foreach( $resources as $resource ) {
-			if ( ! isset( $dependencies->registered[ $resource ] ) ) {
+		foreach ( array( $wp_scripts, $wp_styles ) as $dependencies ) {
+			if ( empty( $dependencies->queue ) || ! isset( $dependencies->registered[ $resource ] ) ) {
 				continue;
 			}
+
+			$type = get_class( $dependencies );
+			$type = strtolower( substr( $type, 3, -1 ) );
 
 			$dependency = $dependencies->registered[ $resource ];
 
