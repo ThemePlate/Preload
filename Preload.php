@@ -53,22 +53,22 @@ class Preload {
 
 	private static function insert( $item ) {
 
-		$item['rel'] = 'preload';
-		$attributes  = '';
+		$item = array( 'rel' => 'preload' ) + $item;
+		$html = '';
 
 		foreach ( $item as $attr => $value ) {
 			$value = ( 'href' === $attr ) ? esc_url( $value ) : esc_attr( $value );
 
 			if ( ! is_string( $attr ) ) {
-				$attributes .= " $value";
+				$html .= " $value";
 			} else {
-				$attributes .= " $attr='$value'";
+				$html .= " $attr='$value'";
 			}
 		}
 
-		$attributes = trim( $attributes );
+		$html = trim( $html );
 
-		echo "<link $attributes />\n";
+		echo "<link $html />\n";
 
 	}
 
