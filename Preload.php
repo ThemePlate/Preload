@@ -31,13 +31,34 @@ class Preload {
 				continue;
 			}
 
-			$type = get_class( $dependencies );
-			$type = strtolower( substr( $type, 3, -1 ) );
-
 			$dependency = $dependencies->registered[ $resource ];
 
-			echo "<link rel='preload' href='{$dependency->src}' as='{$type}' />\n";
+			$type = get_class( $dependencies );
+			$item = array(
+				'href' => $dependency->src,
+				'as'   => strtolower( substr( $type, 3, -1 ) ),
+			);
+
+			self::insert( $item );
 		}
+
+	}
+
+
+	private static function insert( $item ) {
+
+		$item['rel'] = 'preload';
+		$attributes  = '';
+
+		foreach ( $item as $attr => $value ) {
+			$value = ( 'href' === $attr ) ? esc_url( $value ) : esc_attr( $value );
+
+			$attributes .= " $attr='$value'";
+		}
+
+		$attributes = trim( $attributes );
+
+		echo "<link $attributes />\n";
 
 	}
 
