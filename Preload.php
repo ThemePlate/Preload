@@ -13,16 +13,16 @@ class Preload {
 
 	public static function init() {
 
-		$items = apply_filters( 'themeplate_preload', array() );
-
-		foreach( $items as $item ) {
-			self::insert( $item );
-		}
-
-		$resources = apply_filters( 'themeplate_preload_dependencies', array() );
+		$resources = apply_filters( 'themeplate_preload_resources', array() );
 
 		foreach( $resources as $resource ) {
-			self::process( $resource );
+			self::insert( $resource );
+		}
+
+		$dependencies = apply_filters( 'themeplate_preload_dependencies', array() );
+
+		foreach( $dependencies as $dependency ) {
+			self::process( $dependency );
 		}
 
 	}
