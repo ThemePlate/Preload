@@ -24,19 +24,23 @@ class Preload {
 
 	private static function process( $dependencies ) {
 
-		if ( ! empty( $dependencies->queue ) ) {
-			$type = get_class( $dependencies );
-			$type = strtolower( substr( $type, 3, -1 ) );
+		if ( empty( $dependencies->queue ) ) {
+			return;
+		}
 
-			foreach( $dependencies->queue as $handle ) {
-				if ( ! isset( $dependencies->registered[ $handle ] ) ) {
-					continue;
-				}
+		$type = get_class( $dependencies );
+		$type = strtolower( substr( $type, 3, -1 ) );
 
-				$dependency = $dependencies->registered[ $handle ];
+		$resources = apply_filters( 'themeplate_preload', array() );
 
-				echo "<link rel='preload' href='{$dependency->src}' as='{$type}' />\n";
+		foreach( $resources as $resource ) {
+			if ( ! isset( $dependencies->registered[ $resource ] ) ) {
+				continue;
 			}
+
+			$dependency = $dependencies->registered[ $resource ];
+
+			echo "<link rel='preload' href='{$dependency->src}' as='{$type}' />\n";
 		}
 
 	}
