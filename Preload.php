@@ -53,7 +53,11 @@ class Preload {
 		foreach ( $item as $attr => $value ) {
 			$value = ( 'href' === $attr ) ? esc_url( $value ) : esc_attr( $value );
 
-			$attributes .= " $attr='$value'";
+			if ( ! is_string( $attr ) ) {
+				$attributes .= " $value";
+			} else {
+				$attributes .= " $attr='$value'";
+			}
 		}
 
 		$attributes = trim( $attributes );
