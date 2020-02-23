@@ -11,6 +11,8 @@ namespace ThemePlate;
 
 class Preload {
 
+	private static $storage = array();
+
 	public static function init() {
 
 		$resources = apply_filters( 'themeplate_preload_resources', array() );
@@ -21,31 +23,39 @@ class Preload {
 
 		$dependencies = apply_filters( 'themeplate_preload_dependencies', array() );
 
-		foreach( $dependencies as $dependency ) {
-			self::process( $dependency );
+		self::prepare();
+		self::process( $dependencies );
+
+	}
+
+
+	private static function prepare() {
+
+		global $wp_scripts, $wp_styles;
+
+		foreach ( array( $wp_scripts, $wp_styles ) as $dependencies ) {
+			if ( empty( $dependencies->queue ) ) {
+				continue;
+			}
+
+			$type = get_class( $dependencies );
+			self::$storage[ strtolower( substr( $type, 3, -1 ) ) ] = $dependencies->registered;
 		}
 
 	}
 
 
-	private static function process( $resource ) {
+	private static function process( $handles ) {
 
-		global $wp_scripts, $wp_styles;
+		foreach ( self::$storage as $type => $dependencies ) {
+			foreach ( array_intersect( $handles, array_keys( $dependencies ) ) as $handle ) {
+				$item = array(
+					'href' => $dependencies[ $handle ]->src,
+					'as'   => $type,
+				);
 
-		foreach ( array( $wp_scripts, $wp_styles ) as $dependencies ) {
-			if ( empty( $dependencies->queue ) || ! isset( $dependencies->registered[ $resource ] ) ) {
-				continue;
+				self::insert( $item );
 			}
-
-			$dependency = $dependencies->registered[ $resource ];
-
-			$type = get_class( $dependencies );
-			$item = array(
-				'href' => $dependency->src,
-				'as'   => strtolower( substr( $type, 3, -1 ) ),
-			);
-
-			self::insert( $item );
 		}
 
 	}
