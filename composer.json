@@ -14,9 +14,6 @@
     "autoload": {
         "psr-4": {
             "ThemePlate\\": ""
-        },
-        "files": [
-            "functions.php"
-        ]
+        }
     }
 }
