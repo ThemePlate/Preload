@@ -13,11 +13,12 @@ class Preload {
 
 	private static $storage = array();
 
+
 	public static function init() {
 
 		$resources = apply_filters( 'themeplate_preload_resources', array() );
 
-		foreach( $resources as $resource ) {
+		foreach ( $resources as $resource ) {
 			self::insert( $resource );
 		}
 
