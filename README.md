@@ -1,4 +1,6 @@
-# ThemePlate Preload
+# ThemePlate Preload _(Legacy)_
+
+> _Check out the [Resource](https://github.com/ThemePlate/Resource) package._
 
 ## Usage
 
@@ -27,10 +29,10 @@ add_filter( 'themeplate_preload_dependencies', function( $list ) {
 
 Preload resources manually specifying their attributes in an array format
 
-- **$list** *(array)(Required)* List of wanted resources to preload
+- **$list** _(array)(Required)_ List of wanted resources to preload
 
 ### apply_filters( 'themeplate_preload_dependencies', $list )
 
 Preload registered dependencies using their unique handles
 
-- **$list** *(array)(Required)* List of registered dependencies to preload
+- **$list** _(array)(Required)_ List of registered dependencies to preload
